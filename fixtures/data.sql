@@ -1,0 +1,4 @@
+INSERT INTO cases VALUES
+  ('case_1', 84, 91, 13, 7, 10, 219, 'accept'),
+  ('case_2', 63, 105, 11, 22, 7, 127, 'review'),
+  ('case_3', 104, 79, 25, 14, 11, 175, 'accept');
