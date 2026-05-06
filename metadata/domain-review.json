@@ -1,0 +1,73 @@
+{
+  "repo": "riskledger",
+  "language": "SQL",
+  "category": "Databases",
+  "goal": "Analyze exposure buckets and settlement reconciliation.",
+  "review_model": {
+    "terms": [
+      "index fit",
+      "join width",
+      "constraint risk",
+      "plan drift"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "index fit",
+      "signal": 53,
+      "slack": 46,
+      "drag": 16,
+      "confidence": 81,
+      "score": 185,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "join width",
+      "signal": 80,
+      "slack": 28,
+      "drag": 30,
+      "confidence": 91,
+      "score": 189,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "constraint risk",
+      "signal": 55,
+      "slack": 35,
+      "drag": 19,
+      "confidence": 56,
+      "score": 144,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "plan drift",
+      "signal": 50,
+      "slack": 45,
+      "drag": 13,
+      "confidence": 85,
+      "score": 191,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "index fit",
+      "signal": 72,
+      "slack": 36,
+      "drag": 8,
+      "confidence": 55,
+      "score": 211,
+      "lane": "ship"
+    }
+  ]
+}

@@ -1,68 +1,40 @@
 # riskledger
 
-`riskledger` explores databases in SQL. The repository keeps the core rule set compact, then surrounds it with examples that show how the decisions move.
+`riskledger` keeps a focused SQL implementation around databases. The project goal is to analyze exposure buckets and settlement reconciliation.
 
-## Riskledger Notes
+## Use Case
 
-The quickest review path is the verifier first, then the fixtures, then the operations note. That order makes it easy to see whether the code, data, and explanation still agree.
+I want this repository to be useful as a quick reading exercise: fixtures first, implementation second, verifier last.
 
-## Why This Exists
+## Riskledger Review Notes
 
-I use this kind of project to make a rule visible before adding more machinery around it. The important part here is not the size of the codebase. It is that the input signals, scoring rule, fixture data, and expected output can all be checked in one sitting.
+`stale` and `edge` are the cases worth reading first. They show the optimistic and cautious ends of the fixture.
 
-## Feature Notes
+## Highlights
 
-- Models schema shape with deterministic scoring and explicit review decisions.
-- Uses fixture data to keep query checks changes visible in code review.
-- Includes extended examples for fixture rows, including `surge` and `degraded`.
-- Documents constraint behavior tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
+- `fixtures/domain_review.csv` adds cases for index fit and join width.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/riskledger-walkthrough.md` walks through the case spread.
+- The SQL code includes a review path for `index fit` and `constraint risk`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Implementation Notes
+## Code Layout
 
-The design is intentionally direct: parse or construct a signal, score it, classify it, and verify the expected branch. This makes the repository useful for studying databases behavior without needing a service or database unless the language project itself is SQL. The SQL project uses sqlite fixtures, views, and assertions to keep query behavior inspectable.
+The fixture data drives the tests. The code stays thin, while `metadata/domain-review.json` and `config/review-profile.json` explain what each case is meant to protect.
 
-## Code Tour
+The SQL checks add a separate view over the domain review fixture.
 
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-- `schema.sql`: sqlite schema and view definitions
-
-## Local Setup
-
-Use a normal shell with SQL available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
-
-## Try It
+## Run The Check
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Regression Path
 
-## Tests
+The check exercises the source code and the review fixture. `stale` is the high score at 211; `edge` is the low score at 144.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+## Future Work
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Example Scenarios
-
-The examples are meant to be readable before they are exhaustive. They cover enough variation to show how latency and risk can pull a decision below the threshold.
-
-## Boundaries
-
-The fixture set is deliberately small. That keeps the review surface clear, but it also means the model should not be treated as a complete domain simulator.
-
-## Roadmap
-
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add a comparison mode that shows how decisions change when one signal is adjusted.
-- Add one more databases fixture that focuses on a malformed or borderline input.
+The fixture set is small enough to audit by hand. The next useful expansion is malformed input coverage, not extra surface area.
